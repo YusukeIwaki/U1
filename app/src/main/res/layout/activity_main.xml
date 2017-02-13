@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     >
 
-  <fragment
-      android:id="@+id/calendar_fragment"
+  <android.support.v4.view.ViewPager
+      android:id="@+id/viewpager"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:name="io.github.yusukeiwaki.u1.calendar.CalendarFragment"
       />
 </FrameLayout>
