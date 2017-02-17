@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import io.github.yusukeiwaki.u1.AbstractFragment;
 import io.github.yusukeiwaki.u1.R;
 
@@ -31,7 +30,6 @@ public class CalendarFragment extends AbstractFragment {
     Bundle args = getArguments();
     year = args.getInt(KEY_YEAR);
     month = args.getInt(KEY_MONTH);
-    Log.d("hoge", "year/month = "+ year+ "/" + month);
   }
 
   @Override public int getLayout() {

@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import io.github.yusukeiwaki.u1.calendar.CalendarFragment;
+import io.github.yusukeiwaki.u1.calendar.CalendarIndicatorHelper;
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.Period;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
     setupViewPager();
   }
 
-  private static final LocalDate BASE = LocalDate.of(2016, 9, 20);
+  private final CalendarIndicatorHelper
+      indicatorHelper = new CalendarIndicatorHelper(LocalDate.of(2016, 9, 20));
 
   private void setupViewPager() {
     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -28,13 +29,22 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override public Fragment getItem(int position) {
-        LocalDate date = BASE.plusMonths(position);
+        LocalDate date = indicatorHelper.getLocalDateForPosition(position);
         return CalendarFragment.newInstance(date.getYear(), date.getMonthValue());
       }
     });
 
-    Period period = Period.between(BASE, LocalDate.now());
-    int index = period.getYears() * 12 + period.getMonths();
-    viewPager.setCurrentItem(Math.max(0, index));
+    viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+      @Override
+      public void onPageSelected(int position) {
+        LocalDate date = indicatorHelper.getLocalDateForPosition(position);
+        final int year = date.getYear();
+        final int month = date.getMonthValue();
+
+        getSupportActionBar().setTitle(String.format("%d年 %d月", year, month));
+      }
+    });
+
+    viewPager.setCurrentItem(indicatorHelper.getPositionForLocalDate(LocalDate.now()));
   }
 }
