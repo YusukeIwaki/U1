@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 public abstract class AbstractFragment extends Fragment {
 
-  public abstract int getLayout();
+  protected abstract int getLayout();
 
-  public abstract void onSetupView();
+  protected abstract void onSetupView();
 
   protected View rootView;
 

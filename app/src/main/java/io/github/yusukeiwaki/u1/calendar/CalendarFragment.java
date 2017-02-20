@@ -32,11 +32,11 @@ public class CalendarFragment extends AbstractFragment {
     month = args.getInt(KEY_MONTH);
   }
 
-  @Override public int getLayout() {
+  @Override protected int getLayout() {
     return R.layout.fragment_calendar;
   }
 
-  @Override public void onSetupView() {
+  @Override protected void onSetupView() {
     RecyclerView.LayoutManager lm = new GridLayoutManager(getContext(), 7);
 
     RecyclerView recyclerView = (RecyclerView) rootView;
