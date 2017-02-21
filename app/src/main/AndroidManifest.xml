@@ -9,13 +9,16 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       android:name=".U1Application">
-    <activity android:name=".MainActivity">
+    <activity android:name=".calendar.CalendarViewActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity android:name=".daily.DailyViewActivity"
+        android:excludeFromRecents="true"
+        android:taskAffinity=""/>
   </application>
 
 </manifest>

@@ -6,6 +6,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import io.github.yusukeiwaki.u1.AbstractFragment;
 import io.github.yusukeiwaki.u1.R;
+import io.github.yusukeiwaki.u1.daily.DailyViewActivity;
+
+import static io.github.yusukeiwaki.u1.calendar.CurrentMonthCache.updateYearAndMonth;
 
 public class CalendarFragment extends AbstractFragment {
   private static final String KEY_YEAR = "year";
@@ -39,8 +42,41 @@ public class CalendarFragment extends AbstractFragment {
   @Override protected void onSetupView() {
     RecyclerView.LayoutManager lm = new GridLayoutManager(getContext(), 7);
 
+    CalendarDayAdapter adapter = new CalendarDayAdapter(year, month);
+    adapter.setOnItemClickListener(day -> {
+      if (day.type() == CalendarDay.TYPE_IN_MONTH) {
+        showDayAt(year, month, day.day());
+      } else {
+        if (day.day() <= 7) {
+          showNextMonth();
+        } else {
+          showPrevMonth();
+        }
+      }
+    });
+
     RecyclerView recyclerView = (RecyclerView) rootView;
     recyclerView.setLayoutManager(lm);
-    recyclerView.setAdapter(new CalendarDayAdapter(year, month));
+    recyclerView.setAdapter(adapter);
+  }
+
+  private void showDayAt(int year, int month, int day) {
+    getContext().startActivity(DailyViewActivity.newIntent(getContext(), year, month, day));
+  }
+
+  private void showPrevMonth() {
+    if (month == 1) {
+      updateYearAndMonth(getContext(), year - 1, 12);
+    } else {
+      updateYearAndMonth(getContext(), year, month - 1);
+    }
+  }
+
+  private void showNextMonth() {
+    if (month == 12) {
+      updateYearAndMonth(getContext(), year + 1, 1);
+    } else {
+      updateYearAndMonth(getContext(), year, month + 1);
+    }
   }
 }

@@ -11,7 +11,7 @@ public class CalendarIndicatorHelper {
   }
 
   public int getPositionForLocalDate(LocalDate localDate) {
-    Period period = Period.between(base, LocalDate.now());
+    Period period = Period.between(base, localDate);
     int index = period.getYears() * 12 + period.getMonths();
     return Math.max(0, index);
   }

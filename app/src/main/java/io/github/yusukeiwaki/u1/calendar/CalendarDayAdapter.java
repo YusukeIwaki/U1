@@ -10,6 +10,7 @@ import java.util.List;
 public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayViewHolder> {
 
   private final List<CalendarDay> dayList;
+  private OnItemClickListener itemClickListener;
 
   public CalendarDayAdapter(int year, int month) {
     CalendarDayListHelper helper = new CalendarDayListHelper(year, month);
@@ -23,10 +24,28 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayViewHold
   }
 
   @Override public void onBindViewHolder(CalendarDayViewHolder holder, int position) {
-    holder.bind(dayList.get(position));
+    CalendarDay day = dayList.get(position);
+    holder.bind(day);
+    holder.itemView.setTag(day);
+    holder.itemView.setOnClickListener(onClickListener);
   }
+
+  View.OnClickListener onClickListener = view -> {
+    CalendarDay day = (CalendarDay) view.getTag();
+    if (day != null && itemClickListener != null) {
+      itemClickListener.onItemClick(day);
+    }
+  };
 
   @Override public int getItemCount() {
     return dayList.size();
+  }
+
+  public interface OnItemClickListener {
+    void onItemClick(CalendarDay day);
+  }
+
+  public void setOnItemClickListener(OnItemClickListener listener) {
+    itemClickListener = listener;
   }
 }
