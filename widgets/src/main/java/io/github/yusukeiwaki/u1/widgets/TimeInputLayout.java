@@ -10,8 +10,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import com.annimon.stream.Stream;
-import io.github.yusukeiwaki.u1.R;
+import io.github.yusukeiwaki.u1.widget.R;
 import org.threeten.bp.LocalDateTime;
 
 public class TimeInputLayout extends LinearLayout {
@@ -61,32 +60,36 @@ public class TimeInputLayout extends LinearLayout {
 
     skipTextWatcher = false;
 
-    for (EditText editor : editTexts) {
-      editor.setOnClickListener(view -> {
-        editor.requestFocus();
-        editor.selectAll();
+    for (final EditText editor : editTexts) {
+      editor.setOnClickListener(new OnClickListener() {
+        @Override public void onClick(View view) {
+          editor.requestFocus();
+          editor.selectAll();
+        }
       });
-    }
 
-    Stream.of(editTexts).limit(editTexts.length - 1)
-        .forEach(editor -> editor.addTextChangedListener(new SimpleTextWatcher(){
+      if (editor != editTexts[3]) {
+        editor.addTextChangedListener(new SimpleTextWatcher(){
           @Override public void afterTextChanged(Editable s) {
             if (s.length() > 0 && !skipTextWatcher) {
               editor.focusSearch(View.FOCUS_RIGHT).requestFocus();
             }
           }
-        }));
+        });
+      }
 
-    Stream.of(editTexts).skip(1)
-        .forEach(editor -> editor.addTextChangedListener(new SimpleTextWatcher(){
+      if (editor != editTexts[0]) {
+        editor.addTextChangedListener(new SimpleTextWatcher(){
           @Override public void afterTextChanged(Editable s) {
             if (s.length() == 0 && !skipTextWatcher) {
               editor.focusSearch(View.FOCUS_LEFT).requestFocus();
             }
           }
-        }));
+        });
+      }
+    }
 
-    editTexts[editTexts.length - 1].addTextChangedListener(new SimpleTextWatcher() {
+    editTexts[3].addTextChangedListener(new SimpleTextWatcher() {
       @Override public void afterTextChanged(Editable s) {
         if (s.length() > 0 && !skipTextWatcher) {
           if (isValidTime()) {
@@ -133,8 +136,14 @@ public class TimeInputLayout extends LinearLayout {
   }
 
   private boolean isValidTime() {
-    boolean validNumbers = Stream.of(editTexts)
-        .allMatch(editor -> (editor.length() == 1) && TextUtils.isDigitsOnly(editor.getText()));
+    boolean validNumbers = true;
+
+    for (EditText editor : editTexts) {
+      if ((editor.length() != 1) || !TextUtils.isDigitsOnly(editor.getText())) {
+        validNumbers = false;
+        break;
+      }
+    }
 
     if (!validNumbers) return false;
 
