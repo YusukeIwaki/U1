@@ -25,8 +25,8 @@ android {
 }
 
 ext {
-  firebaseVersion = '10.0.1'
-  supportLibVersion = '25.1.1'
+  firebaseVersion = '10.2.0'
+  supportLibVersion = '25.2.0'
 }
 
 dependencies {
