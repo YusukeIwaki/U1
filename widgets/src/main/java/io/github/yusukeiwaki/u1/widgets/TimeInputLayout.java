@@ -156,6 +156,11 @@ public class TimeInputLayout extends LinearLayout {
     return hour >= 0 && hour< 24 && minute >= 0 && minute < 60;
   }
 
+  public LocalDateTime getLocalDateTimeWithDate(int year, int month, int day) {
+    TimeOfDay timeOfDay = getTime();
+    return LocalDateTime.of(year, month, day, timeOfDay.hour, timeOfDay.minute);
+  }
+
   private void shake() {
     startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake));
   }

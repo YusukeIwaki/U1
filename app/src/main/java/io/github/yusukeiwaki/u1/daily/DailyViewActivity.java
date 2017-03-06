@@ -9,6 +9,10 @@ import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDate;
 
 public class DailyViewActivity extends AppCompatActivity {
+  private int year;
+  private int month;
+  private int day;
+
   private static final String KEY_YEAR = "year";
   private static final String KEY_MONTH = "month";
   private static final String KEY_DAY = "day";
@@ -28,9 +32,9 @@ public class DailyViewActivity extends AppCompatActivity {
 
     Intent intent = getIntent();
     LocalDate dateNow = LocalDate.now();
-    int year = intent.getIntExtra(KEY_YEAR, dateNow.getYear());
-    int month = intent.getIntExtra(KEY_MONTH, dateNow.getMonthValue());
-    int day = intent.getIntExtra(KEY_DAY, dateNow.getDayOfMonth());
+    year = intent.getIntExtra(KEY_YEAR, dateNow.getYear());
+    month = intent.getIntExtra(KEY_MONTH, dateNow.getMonthValue());
+    day = intent.getIntExtra(KEY_DAY, dateNow.getDayOfMonth());
     setToolbarTitle(String.format("%d年 %d月%d日", year, month, day));
 
     findViewById(R.id.fab_add).setOnClickListener(view -> {
@@ -38,7 +42,7 @@ public class DailyViewActivity extends AppCompatActivity {
       String tag = EditLifeEventDialogFragment.class.getSimpleName();
 
       if (fm.findFragmentByTag(tag) == null) {
-        EditLifeEventDialogFragment.newInstance().show(fm, tag);
+        EditLifeEventDialogFragment.newInstance(year, month, day).show(fm, tag);
       }
     });
   }
