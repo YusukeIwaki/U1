@@ -3,6 +3,7 @@ package io.github.yusukeiwaki.u1.daily;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDate;
@@ -31,6 +32,15 @@ public class DailyViewActivity extends AppCompatActivity {
     int month = intent.getIntExtra(KEY_MONTH, dateNow.getMonthValue());
     int day = intent.getIntExtra(KEY_DAY, dateNow.getDayOfMonth());
     setToolbarTitle(String.format("%d年 %d月%d日", year, month, day));
+
+    findViewById(R.id.fab_add).setOnClickListener(view -> {
+      FragmentManager fm = getSupportFragmentManager();
+      String tag = EditLifeEventDialogFragment.class.getSimpleName();
+
+      if (fm.findFragmentByTag(tag) == null) {
+        EditLifeEventDialogFragment.newInstance().show(fm, tag);
+      }
+    });
   }
 
   private void setToolbarTitle(String title) {
