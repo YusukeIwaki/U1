@@ -39,10 +39,10 @@ public class DailyViewActivity extends AppCompatActivity {
 
     findViewById(R.id.fab_add).setOnClickListener(view -> {
       FragmentManager fm = getSupportFragmentManager();
-      String tag = EditLifeEventDialogFragment.class.getSimpleName();
+      String tag = AddLifeEventDialogFragment.class.getSimpleName();
 
       if (fm.findFragmentByTag(tag) == null) {
-        EditLifeEventDialogFragment.newInstance(year, month, day).show(fm, tag);
+        AddLifeEventDialogFragment.newInstance(year, month, day).show(fm, tag);
       }
     });
   }

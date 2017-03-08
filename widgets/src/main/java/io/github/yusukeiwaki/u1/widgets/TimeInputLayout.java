@@ -124,6 +124,10 @@ public class TimeInputLayout extends LinearLayout {
     }
   }
 
+  public void setTime(LocalDateTime localDateTime) {
+    setTime(localDateTime.getHour(), localDateTime.getMinute());
+  }
+
   public @Nullable TimeOfDay getTime() {
     if (!isValidTime()) return null;
 

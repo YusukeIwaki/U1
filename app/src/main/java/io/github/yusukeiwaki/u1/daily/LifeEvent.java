@@ -6,15 +6,34 @@ import org.threeten.bp.LocalDateTime;
 
 // DO NOT USE Auto.Value for using with Firebase DB.
 public class LifeEvent implements Serializable {
-  public final LocalDateTime timeStart;
-  public final LocalDateTime timeEnd;
-  public final List<String> events;
-  public final String memo;
+  private LocalDateTime timeStart;
+  private LocalDateTime timeEnd;
+  private List<String> events;
+  private String memo;
+
+  private LifeEvent() {
+  }
 
   public LifeEvent(LocalDateTime timeStart, LocalDateTime timeEnd, List<String> events, String memo) {
     this.timeStart = timeStart;
     this.timeEnd = timeEnd;
     this.events = events;
     this.memo = memo;
+  }
+
+  public LocalDateTime getTimeStart() {
+    return timeStart;
+  }
+
+  public LocalDateTime getTimeEnd() {
+    return timeEnd;
+  }
+
+  public List<String> getEvents() {
+    return events;
+  }
+
+  public String getMemo() {
+    return memo;
   }
 }
