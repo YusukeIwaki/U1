@@ -46,6 +46,7 @@ dependencies {
   compile "com.google.firebase:firebase-auth:$firebaseVersion"
   compile "com.google.firebase:firebase-database:$firebaseVersion"
   compile "com.google.android.gms:play-services-auth:$firebaseVersion"
+  compile 'com.firebaseui:firebase-ui-database:1.2.0'
 
   compile 'com.github.yusukeiwaki.android-widget:widget-fontawesome:0.0.1'
   compile 'com.github.varunest:sparkbutton:1.0.4'

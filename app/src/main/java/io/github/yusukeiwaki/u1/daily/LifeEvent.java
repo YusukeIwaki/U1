@@ -2,30 +2,34 @@ package io.github.yusukeiwaki.u1.daily;
 
 import java.io.Serializable;
 import java.util.List;
-import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
 
 // DO NOT USE Auto.Value for using with Firebase DB.
 public class LifeEvent implements Serializable {
-  private LocalDateTime timeStart;
-  private LocalDateTime timeEnd;
+  private long timeStart;
+  private long timeEnd;
   private List<String> events;
   private String memo;
+
+  public static ZoneOffset getTimeZone() {
+    return ZoneOffset.ofHours(9);
+  }
 
   private LifeEvent() {
   }
 
-  public LifeEvent(LocalDateTime timeStart, LocalDateTime timeEnd, List<String> events, String memo) {
+  public LifeEvent(long timeStart, long timeEnd, List<String> events, String memo) {
     this.timeStart = timeStart;
     this.timeEnd = timeEnd;
     this.events = events;
     this.memo = memo;
   }
 
-  public LocalDateTime getTimeStart() {
+  public long getTimeStart() {
     return timeStart;
   }
 
-  public LocalDateTime getTimeEnd() {
+  public long getTimeEnd() {
     return timeEnd;
   }
 

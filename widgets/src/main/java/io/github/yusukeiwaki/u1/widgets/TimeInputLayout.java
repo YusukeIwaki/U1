@@ -109,7 +109,7 @@ public class TimeInputLayout extends LinearLayout {
     setTime(currentTime.getHour(), currentTime.getMinute());
   }
 
-  public void setTime(@IntRange(from=0, to=23) int hourOfDay, @IntRange(from=0, to=59) int minutes) {
+  private void setTime(@IntRange(from=0, to=23) int hourOfDay, @IntRange(from=0, to=59) int minutes) {
     skipTextWatcher = true;
     editTexts[0].setText(Integer.toString(hourOfDay/10));
     editTexts[1].setText(Integer.toString(hourOfDay%10));
@@ -158,11 +158,6 @@ public class TimeInputLayout extends LinearLayout {
     int minute = Integer.parseInt(minuteString, 10);
 
     return hour >= 0 && hour< 24 && minute >= 0 && minute < 60;
-  }
-
-  public LocalDateTime getLocalDateTimeWithDate(int year, int month, int day) {
-    TimeOfDay timeOfDay = getTime();
-    return LocalDateTime.of(year, month, day, timeOfDay.hour, timeOfDay.minute);
   }
 
   private void shake() {

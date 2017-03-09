@@ -2,6 +2,7 @@ package io.github.yusukeiwaki.u1.daily;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import io.github.yusukeiwaki.u1.AbstractDialogFragment;
 
 public class AddLifeEventDialogFragment extends AbstractDialogFragment {

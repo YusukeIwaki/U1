@@ -22,6 +22,13 @@ public class LifeEventEditor {
     this.day = day;
   }
 
+  public LifeEventEditor(long epoch) {
+    LocalDateTime localDateTime = getLocalDateTimeOfDayFor(epoch);
+    this.year = localDateTime.getYear();
+    this.month = localDateTime.getMonthValue();
+    this.day = localDateTime.getDayOfMonth();
+  }
+
   public int getLayout() {
     return R.layout.dialog_edit_lifeevent;
   }
@@ -89,12 +96,20 @@ public class LifeEventEditor {
 
 
       return new LifeEvent(
-          editorTimeStart.getLocalDateTimeWithDate(year, month, day),
-          chkTimeEnd.isChecked() ? editorTimeEnd.getLocalDateTimeWithDate(year, month, day) : null,
+          getEpochSecondsFor(editorTimeStart.getTime()),
+          chkTimeEnd.isChecked() ? getEpochSecondsFor(editorTimeEnd.getTime()) : 0,
           selectedChk,
           editorMemo.getText().toString());
     }
+  }
 
+  private long getEpochSecondsFor(TimeInputLayout.TimeOfDay timeOfDay) {
+    return LocalDateTime.of(year, month, day, timeOfDay.hour, timeOfDay.minute)
+        .toEpochSecond(LifeEvent.getTimeZone());
+  }
+
+  private LocalDateTime getLocalDateTimeOfDayFor(long epoch) {
+    return LocalDateTime.ofEpochSecond(epoch, 0, LifeEvent.getTimeZone());
   }
 
   public void initializeDialogValuesWith(Dialog dialog, LifeEvent lifeEvent) {
@@ -102,11 +117,11 @@ public class LifeEventEditor {
     TimeInputLayout editorTimeEnd = (TimeInputLayout) dialog.findViewById(R.id.editor_time_end);
     CompoundButton chkTimeEnd = (CompoundButton) dialog.findViewById(R.id.chk_time_end);
 
-    editorTimeStart.setTime(lifeEvent.getTimeStart());
-    LocalDateTime timeEnd = lifeEvent.getTimeEnd();
-    if (timeEnd != null) {
+    editorTimeStart.setTime(getLocalDateTimeOfDayFor(lifeEvent.getTimeStart()));
+    long timeEnd = lifeEvent.getTimeEnd();
+    if (timeEnd != 0) {
       chkTimeEnd.setChecked(true);
-      editorTimeEnd.setTime(timeEnd);
+      editorTimeEnd.setTime(getLocalDateTimeOfDayFor(timeEnd));
     }
 
     TextView editorMemo = (TextView) dialog.findViewById(R.id.editor_memo);

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import io.github.yusukeiwaki.u1.AbstractDialogFragment;
-import org.threeten.bp.LocalDateTime;
 
 public class EditLifeEventDialogFragment extends AbstractDialogFragment {
   private static final String KEY_ID = "id";
@@ -45,8 +44,7 @@ public class EditLifeEventDialogFragment extends AbstractDialogFragment {
     origId = args.getString(KEY_ID);
     origLifeEvent = (LifeEvent) args.getSerializable(KEY_LIFE_EVENT);
 
-    LocalDateTime dateTime = origLifeEvent.getTimeStart();
-    lifeEventEditor = new LifeEventEditor(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
+    lifeEventEditor = new LifeEventEditor(origLifeEvent.getTimeStart());
   }
 
   @Override protected void onSetupDialog() {
