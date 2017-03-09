@@ -63,6 +63,19 @@ public class DailyViewActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     dailyLifeEventRecyclerViewAdapter = new DailyLifeEventRecyclerViewAdapter(year, month, day);
+    dailyLifeEventRecyclerViewAdapter.setOnClickListener((key, lifeEvent) -> {
+      FragmentManager fm = getSupportFragmentManager();
+      String tag = EditLifeEventDialogFragment.class.getSimpleName();
+
+      EditLifeEventDialogFragment.newInstance(key, lifeEvent).show(fm, tag);
+    });
+    dailyLifeEventRecyclerViewAdapter.setOnLongClickListener((key, lifeEvent) -> {
+      FragmentManager fm = getSupportFragmentManager();
+      String tag = EditLifeEventDialogFragment.class.getSimpleName();
+
+      DeleteLifeEventDialogFragment.newInstance(key).show(fm, tag);
+      return true;
+    });
     recyclerView.setAdapter(dailyLifeEventRecyclerViewAdapter);
   }
 

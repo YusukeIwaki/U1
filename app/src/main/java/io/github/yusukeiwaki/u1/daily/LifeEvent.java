@@ -1,8 +1,10 @@
 package io.github.yusukeiwaki.u1.daily;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import org.threeten.bp.ZoneOffset;
+import org.threeten.bp.format.DateTimeFormatter;
 
 // DO NOT USE Auto.Value for using with Firebase DB.
 public class LifeEvent implements Serializable {
@@ -13,6 +15,10 @@ public class LifeEvent implements Serializable {
 
   public static ZoneOffset getTimeZone() {
     return ZoneOffset.ofHours(9);
+  }
+
+  public static DateTimeFormatter getTimeFormatter() {
+    return DateTimeFormatter.ofPattern("HH:mm");
   }
 
   private LifeEvent() {
@@ -34,7 +40,7 @@ public class LifeEvent implements Serializable {
   }
 
   public List<String> getEvents() {
-    return events;
+    return events == null ? Collections.emptyList() : events;
   }
 
   public String getMemo() {
