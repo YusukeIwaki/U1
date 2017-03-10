@@ -20,14 +20,19 @@ public class DarkClockActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     findViewById(android.R.id.content).setSystemUiVisibility(
-        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+    );
 
-    WindowManager.LayoutParams lp = getWindow().getAttributes();
-    lp.screenBrightness = 0.005f;
-    lp.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-    lp.flags |= WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
-    lp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-    getWindow().setAttributes(lp);
+    getWindow().addFlags(
+        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+    );
 
     setContentView(R.layout.activity_dark_clock);
 
@@ -37,6 +42,7 @@ public class DarkClockActivity extends AppCompatActivity {
     registerReceiver(myReceiver, filter);
 
     updateCurrentTime();
+    initializeScreenDarkness();
   }
 
   @Override protected void onDestroy() {
@@ -84,5 +90,21 @@ public class DarkClockActivity extends AppCompatActivity {
     } else {
       icon.setText(R.string.fa_battery_full);
     }
+  }
+
+  private void initializeScreenDarkness() {
+    int hour = LocalDateTime.now().getHour();
+    boolean isNight = hour <= 6 || hour >= 17;
+    setActivityDark(isNight);
+  }
+
+  private void setActivityDark(boolean dark) {
+    WindowManager.LayoutParams lp = getWindow().getAttributes();
+    float brightness = dark ? 0.01f : WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+    lp.screenBrightness = brightness;
+    lp.buttonBrightness = brightness;
+    getWindow().setAttributes(lp);
+
+    findViewById(R.id.dark_clock_container).setAlpha(dark ? 0.5f : 1.0f);
   }
 }

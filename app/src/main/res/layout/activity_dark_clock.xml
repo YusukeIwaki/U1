@@ -8,11 +8,11 @@
     >
 
   <LinearLayout
+      android:id="@+id/dark_clock_container"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"
       android:layout_gravity="center"
-      android:alpha="0.5"
       android:gravity="center">
 
     <TextView
