@@ -5,7 +5,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/*package*/ class FirebaseLifeEventManager {
+public class FirebaseLifeEventManager {
   private static final String TAG = FirebaseLifeEventManager.class.getSimpleName();
 
   public static DatabaseReference getDatabaseReference() {

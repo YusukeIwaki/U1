@@ -22,4 +22,6 @@ dependencies {
   compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
   //noinspection GradleDynamicVersion
   provided 'com.android.support:support-annotations:+'
+
+  compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
 }
