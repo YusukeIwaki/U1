@@ -1,23 +1,22 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.daily;
 
 import io.github.yusukeiwaki.u1.CalendarConfig;
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.Period;
+import org.threeten.bp.temporal.ChronoUnit;
 
-public class CalendarIndicatorHelper {
+public class DailyViewIndicatorHelper {
   private final LocalDate base = CalendarConfig.START_DATE;
 
   public int getCount() {
-    return CalendarConfig.DURATION_MONTHS;
+    return (int) ChronoUnit.DAYS.between(base, base.plusMonths(CalendarConfig.DURATION_MONTHS));
   }
 
   public int getPositionForLocalDate(LocalDate localDate) {
-    Period period = Period.between(base, localDate);
-    int index = (int) period.toTotalMonths();
+    int index = (int) ChronoUnit.DAYS.between(base, localDate);
     return Math.max(0, index);
   }
 
   public LocalDate getLocalDateForPosition(int position) {
-    return base.plusMonths(position);
+    return base.plusDays(position);
   }
 }

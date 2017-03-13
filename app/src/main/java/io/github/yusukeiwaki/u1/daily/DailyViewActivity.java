@@ -3,23 +3,20 @@ package io.github.yusukeiwaki.u1.daily;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import io.github.yusukeiwaki.u1.CalendarConfig;
 import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDate;
 
 public class DailyViewActivity extends AppCompatActivity {
-  private int year;
-  private int month;
-  private int day;
+  private LocalDate localDate;
 
   private static final String KEY_YEAR = "year";
   private static final String KEY_MONTH = "month";
   private static final String KEY_DAY = "day";
-
-  private DailyLifeEventRecyclerViewAdapter dailyLifeEventRecyclerViewAdapter;
 
   public static Intent newIntent(Context context, int year, int month, int day) {
     Intent intent = new Intent(context, DailyViewActivity.class);
@@ -29,58 +26,48 @@ public class DailyViewActivity extends AppCompatActivity {
     return intent;
   }
 
-
-  @Override public void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_daily_view);
+    setContentView(R.layout.activity_calendar_view);
 
     Intent intent = getIntent();
     LocalDate dateNow = LocalDate.now();
-    year = intent.getIntExtra(KEY_YEAR, dateNow.getYear());
-    month = intent.getIntExtra(KEY_MONTH, dateNow.getMonthValue());
-    day = intent.getIntExtra(KEY_DAY, dateNow.getDayOfMonth());
-    setToolbarTitle(String.format("%d年 %d月%d日", year, month, day));
+    int year = intent.getIntExtra(KEY_YEAR, dateNow.getYear());
+    int month = intent.getIntExtra(KEY_MONTH, dateNow.getMonthValue());
+    int day = intent.getIntExtra(KEY_DAY, dateNow.getDayOfMonth());
+    localDate = LocalDate.of(year, month, day);
 
-    setupLifeEventRecyclerView();
+    setupViewPager();
+  }
 
-    findViewById(R.id.fab_add).setOnClickListener(view -> {
-      FragmentManager fm = getSupportFragmentManager();
-      String tag = AddLifeEventDialogFragment.class.getSimpleName();
+  private void setupViewPager() {
+    final DailyViewIndicatorHelper indicatorHelper = new DailyViewIndicatorHelper();
 
-      if (fm.findFragmentByTag(tag) == null) {
-        AddLifeEventDialogFragment.newInstance(year, month, day).show(fm, tag);
+    ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+    viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+      @Override public int getCount() {
+        return indicatorHelper.getCount();
+      }
+
+      @Override public Fragment getItem(int position) {
+        LocalDate date = indicatorHelper.getLocalDateForPosition(position);
+        return DailyViewFragment.newInstance(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
       }
     });
-  }
 
-  private void setToolbarTitle(String title) {
-    getSupportActionBar().setTitle(title);
-  }
+    viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+      @Override
+      public void onPageSelected(int position) {
+        LocalDate date = indicatorHelper.getLocalDateForPosition(position);
+        final int year = date.getYear();
+        final int month = date.getMonthValue();
+        final int day = date.getDayOfMonth();
 
-  private void setupLifeEventRecyclerView() {
-    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.lifeevent_recyclerview);
-
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-    dailyLifeEventRecyclerViewAdapter = new DailyLifeEventRecyclerViewAdapter(year, month, day);
-    dailyLifeEventRecyclerViewAdapter.setOnClickListener((key, lifeEvent) -> {
-      FragmentManager fm = getSupportFragmentManager();
-      String tag = EditLifeEventDialogFragment.class.getSimpleName();
-
-      EditLifeEventDialogFragment.newInstance(key, lifeEvent).show(fm, tag);
+        getSupportActionBar().setTitle(String.format("%d年 %d月%d日", year, month, day));
+      }
     });
-    dailyLifeEventRecyclerViewAdapter.setOnLongClickListener((key, lifeEvent) -> {
-      FragmentManager fm = getSupportFragmentManager();
-      String tag = EditLifeEventDialogFragment.class.getSimpleName();
 
-      DeleteLifeEventDialogFragment.newInstance(key).show(fm, tag);
-      return true;
-    });
-    recyclerView.setAdapter(dailyLifeEventRecyclerViewAdapter);
+    viewPager.setCurrentItem(indicatorHelper.getPositionForLocalDate(localDate));
   }
 
-  @Override protected void onDestroy() {
-    dailyLifeEventRecyclerViewAdapter.cleanup();
-    super.onDestroy();
-  }
 }

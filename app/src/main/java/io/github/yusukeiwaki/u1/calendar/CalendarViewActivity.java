@@ -36,13 +36,13 @@ public class CalendarViewActivity extends AppCompatActivity {
   }
 
   private final CalendarIndicatorHelper
-      indicatorHelper = new CalendarIndicatorHelper(LocalDate.of(2016, 9, 1));
+      indicatorHelper = new CalendarIndicatorHelper();
 
   private void setupViewPager() {
     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
     viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
       @Override public int getCount() {
-        return 72;
+        return indicatorHelper.getCount();
       }
 
       @Override public Fragment getItem(int position) {
