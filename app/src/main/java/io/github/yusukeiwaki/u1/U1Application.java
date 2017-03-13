@@ -1,6 +1,7 @@
 package io.github.yusukeiwaki.u1;
 
 import android.app.Application;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 public class U1Application extends Application {
@@ -8,5 +9,7 @@ public class U1Application extends Application {
     super.onCreate();
 
     AndroidThreeTen.init(this);
+
+    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
   }
 }
