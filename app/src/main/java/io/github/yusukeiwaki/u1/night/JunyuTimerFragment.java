@@ -31,7 +31,8 @@ public class JunyuTimerFragment extends AbstractFragment {
     junyuTimerManager.initialize();
 
 
-    rootView.findViewById(R.id.btn_upload_record).setOnClickListener(view -> {
+    View btnUpload = rootView.findViewById(R.id.btn_upload_record);
+    btnUpload.setOnClickListener(view -> {
       junyuTimerManager.uploadLifeEvent();
     });
 

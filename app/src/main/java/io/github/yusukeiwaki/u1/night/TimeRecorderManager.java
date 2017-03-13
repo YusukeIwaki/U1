@@ -1,13 +1,19 @@
 package io.github.yusukeiwaki.u1.night;
 
+import android.util.Pair;
 import android.widget.TextView;
 import com.varunest.sparkbutton.SparkButton;
 import io.github.yusukeiwaki.u1.widgets.CircularTimerRecorder;
+import java.util.ArrayList;
+import java.util.List;
+import org.threeten.bp.LocalDateTime;
 
 public class TimeRecorderManager {
   private final CircularTimerRecorder timerRecorder;
   private final SparkButton toggleButton;
   private final TextView minuteText;
+  private final ArrayList<Pair<LocalDateTime, LocalDateTime>> timeRangeList = new ArrayList<>();
+  private LocalDateTime timeStarted;
 
   public interface OnTimerStartCallback {
     void onTimerStart();
@@ -29,8 +35,13 @@ public class TimeRecorderManager {
         if (onTimerStartCallback != null) {
           onTimerStartCallback.onTimerStart();
         }
+        timeStarted = LocalDateTime.now();
       } else {
         timerRecorder.stopTimer();
+        if (timeStarted != null) {
+          timeRangeList.add(new Pair<>(timeStarted, LocalDateTime.now()));
+          timeStarted = null;
+        }
       }
     });
 
@@ -45,14 +56,23 @@ public class TimeRecorderManager {
   public void forceStop() {
     toggleButton.setChecked(false);
     timerRecorder.stopTimer();
+    if (timeStarted != null) {
+      timeRangeList.add(new Pair<>(timeStarted, LocalDateTime.now()));
+      timeStarted = null;
+    }
   }
 
   public long getElapsedTime() {
     return timerRecorder.getElapsedTime();
   }
 
+  public List<Pair<LocalDateTime, LocalDateTime>> getTimeRangeList() {
+    return timeRangeList;
+  }
+
   public void reset() {
     toggleButton.setChecked(false);
     timerRecorder.resetTimer();
+    timeRangeList.clear();
   }
 }
