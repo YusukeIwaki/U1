@@ -1,5 +1,6 @@
 package io.github.yusukeiwaki.u1.night;
 
+import android.view.View;
 import android.widget.TextView;
 import com.varunest.sparkbutton.SparkButton;
 import io.github.yusukeiwaki.u1.AbstractFragment;
@@ -12,15 +13,20 @@ public class JunyuTimerFragment extends AbstractFragment {
   }
 
   @Override protected void onSetupView() {
+    SparkButton btnTimeRecorderLeft = (SparkButton) rootView.findViewById(R.id.btn_time_recorder_left);
+    SparkButton btnTimeRecorderRight = (SparkButton) rootView.findViewById(R.id.btn_time_recorder_right);
     JunyuTimerManager junyuTimerManager = new JunyuTimerManager(getContext(),
         new TimeRecorderManager(
-            (SparkButton) rootView.findViewById(R.id.btn_time_recorder_left),
+            btnTimeRecorderLeft,
             (CircularTimerRecorder) rootView.findViewById(R.id.time_recorder_left),
             (TextView) rootView.findViewById(R.id.text_time_recorder_left)),
         new TimeRecorderManager(
-            (SparkButton) rootView.findViewById(R.id.btn_time_recorder_right),
+            btnTimeRecorderRight,
             (CircularTimerRecorder) rootView.findViewById(R.id.time_recorder_right),
             (TextView) rootView.findViewById(R.id.text_time_recorder_right)));
+
+    extendTouchBoundary(btnTimeRecorderLeft);
+    extendTouchBoundary(btnTimeRecorderRight);
 
     junyuTimerManager.initialize();
 
@@ -29,5 +35,12 @@ public class JunyuTimerFragment extends AbstractFragment {
       junyuTimerManager.uploadLifeEvent();
     });
 
+  }
+
+  private void extendTouchBoundary(SparkButton sparkButton) {
+    View parent = (View) sparkButton.getParent().getParent();
+    parent.setOnClickListener(view -> {
+      sparkButton.callOnClick();
+    });
   }
 }

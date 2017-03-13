@@ -26,13 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#33FFFFFF"/>
-    <Button
-        android:id="@+id/btn_show_timer"
+    <TextView
+        android:id="@+id/caption_show_timer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:gravity="center"
         android:text="↑ 授乳タイマー"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
         />
     <fragment
         android:id="@+id/fragment_junyu_timer"

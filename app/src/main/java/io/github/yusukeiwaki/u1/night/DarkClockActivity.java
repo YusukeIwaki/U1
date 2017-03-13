@@ -24,9 +24,8 @@ public class DarkClockActivity extends AppCompatActivity {
     findViewById(android.R.id.content).setSystemUiVisibility(
         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LOW_PROFILE
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     );
 
@@ -112,20 +111,19 @@ public class DarkClockActivity extends AppCompatActivity {
 
   private void setupBottomSheet() {
     BottomSheetBehavior bottomSheet = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-    View btnShowTimer = findViewById(R.id.btn_show_timer);
+    View captionShowTimer = findViewById(R.id.caption_show_timer);
+    View fragment = findViewById(R.id.fragment_junyu_timer);
 
     bottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
       @Override public void onStateChanged(@NonNull View bottomSheet, int newState) {
-        btnShowTimer.setEnabled(newState != BottomSheetBehavior.STATE_EXPANDED);
+        captionShowTimer.setVisibility(newState == BottomSheetBehavior.STATE_COLLAPSED ?
+            View.VISIBLE : View.GONE);
       }
 
       @Override public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
+        fragment.setAlpha(slideOffset);
       }
     });
-
-    btnShowTimer.setOnClickListener(view -> {
-      bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-    });
+    fragment.setAlpha(0);
   }
 }
