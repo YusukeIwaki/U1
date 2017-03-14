@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="center"
+      >
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="16dp"
+        >
+
+      <TextView
+          android:id="@+id/text_time_recorder_left"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="0分"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          android:layout_margin="4dp"
+          />
+
+      <FrameLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clipToPadding="false"
+          android:clipChildren="false"
+          >
+        <io.github.yusukeiwaki.u1.widgets.CircularTimerRecorder
+            android:id="@+id/time_recorder_left"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center"
+            android:alpha="0.6"
+            />
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/btn_time_recorder_left"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:sparkbutton_activeImage="@drawable/btn_left_on"
+            app:sparkbutton_inActiveImage="@drawable/btn_left_off"
+            app:sparkbutton_iconSize="48dp"
+            app:sparkbutton_primaryColor="@color/whitePrimary"
+            app:sparkbutton_secondaryColor="@color/whiteSecondary"
+            android:layout_gravity="center"
+            />
+      </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="16dp"
+        >
+
+      <TextView
+          android:id="@+id/text_time_recorder_right"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="0分"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          android:layout_margin="4dp"
+          />
+
+      <FrameLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clipToPadding="false"
+          android:clipChildren="false"
+          >
+        <io.github.yusukeiwaki.u1.widgets.CircularTimerRecorder
+            android:id="@+id/time_recorder_right"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center"
+            android:alpha="0.6"
+            />
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/btn_time_recorder_right"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:sparkbutton_activeImage="@drawable/btn_right_on"
+            app:sparkbutton_inActiveImage="@drawable/btn_right_off"
+            app:sparkbutton_iconSize="48dp"
+            app:sparkbutton_primaryColor="@color/whitePrimary"
+            app:sparkbutton_secondaryColor="@color/whiteSecondary"
+            android:layout_gravity="center"
+            />
+      </FrameLayout>
+    </LinearLayout>
+  </LinearLayout>
+
+  <io.github.yusukeiwaki.android.widget.FontAwesomeButton
+      android:id="@+id/btn_upload_record"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="32dp"
+      android:layout_gravity="center_horizontal|bottom"
+      style="@style/Widget.AppCompat.Button.Borderless"
+      android:text="@string/fa_upload"
+      android:alpha="0.6"
+      />
+</FrameLayout>
