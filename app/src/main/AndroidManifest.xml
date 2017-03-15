@@ -24,7 +24,8 @@
         android:icon="@mipmap/ic_dark_clock"
         android:label="U1時計"
         android:launchMode="singleTask"
-        android:theme="@style/AppTheme.Night">
+        android:theme="@style/AppTheme.Night"
+        android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
