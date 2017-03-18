@@ -47,15 +47,6 @@ public class LifeEventEditor {
     }
 
     public void execute() {
-      SparkButton chkNyou = (SparkButton) dialog.findViewById(R.id.chk_nyou);
-      chkNyou.setTag("尿");
-      SparkButton chkBen = (SparkButton) dialog.findViewById(R.id.chk_ben);
-      chkBen.setTag("便");
-      SparkButton chkChusha = (SparkButton) dialog.findViewById(R.id.chk_chusha);
-      chkChusha.setTag("注射");
-      SparkButton chkJunyu = (SparkButton) dialog.findViewById(R.id.chk_junyu);
-      chkJunyu.setTag("授乳");
-
       CompoundButton chkTimeEnd = (CompoundButton) dialog.findViewById(R.id.chk_time_end);
       onCheckTimeEndChanged(chkTimeEnd, chkTimeEnd.isChecked());
       chkTimeEnd.setOnCheckedChangeListener(this::onCheckTimeEndChanged);
