@@ -5,84 +5,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Message;
 import java.util.List;
 
 /*package*/ class NightScreenBrightnessManager {
   public interface Callback {
     void onNightStateDetected(boolean isNight);
   }
-
-  private static class NightStateDetector {
-    private static final int SIZE = 5;
-    private final int[] states = new int[SIZE];
-    private int index = 0;
-    private boolean hasEnoughData = false;
-    private final Callback callback;
-
-    private static final int STATE_UNSTABLE = -1;
-    private static final int STATE_NIGHT = 0;
-    private static final int STATE_DAY = 1;
-    private int state = STATE_UNSTABLE;
-
-    private NightStateDetector(Callback callback) {
-      this.callback = callback;
-    }
-
-    public void pushData(float value) {
-      int i = index % SIZE;
-      states[i] = getStateOf(value);
-
-      index++;
-      if (index >= SIZE) {
-        if (!hasEnoughData) {
-          hasEnoughData = true;
-        }
-        index %= SIZE;
-      }
-
-      if (hasEnoughData) handleValues();
-    }
-
-    private int getStateOf(float value) {
-      //確実にnight
-      if (value < 1.0f) return STATE_NIGHT;
-
-      //確実にday
-      if (value >= 2.0f) return STATE_DAY;
-
-      return STATE_UNSTABLE;
-    }
-
-    private void handleValues() {
-      int newState = detectStatePrecisely();
-      if (newState != state) {
-        state = newState;
-        callback.onNightStateDetected(state == STATE_NIGHT);
-      }
-    }
-
-    private int detectStatePrecisely() {
-      int numNight = 0;
-      int numDay = 0;
-      int numOther = 0;
-      for (int state: states) {
-        if (state == STATE_NIGHT) numNight++;
-        else if (state == STATE_DAY) numDay++;
-        else numOther++;
-      }
-
-      if (numNight > numDay && numNight > numOther) {
-        return STATE_NIGHT;
-      }
-      if (numDay > numNight && numDay > numOther) {
-        return STATE_DAY;
-      }
-      return STATE_UNSTABLE;
-    }
-  }
-
-  private NightStateDetector nightStateDetector;
-
 
   private boolean isEnabled;
   private final SensorManager sensorManager;
@@ -99,15 +29,27 @@ import java.util.List;
     }
 
     private void handleSensorValue(float value) {
-      nightStateDetector.pushData(value);
+      boolean isNight = value <= 1.0f;
+      Message m = handler.obtainMessage(0, isNight);
+      handler.removeMessages(0);
+      handler.sendMessageDelayed(m, 600);
+    }
+  };
+
+
+
+  private final Callback callback;
+  private Handler handler = new Handler() {
+    @Override public void handleMessage(Message msg) {
+      if (callback != null) callback.onNightStateDetected((boolean) msg.obj);
     }
   };
 
   public NightScreenBrightnessManager(Context context, Callback callback) {
-    nightStateDetector = new NightStateDetector(callback);
     isEnabled = false;
 
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+    this.callback = callback;
   }
 
   public void enable() {
