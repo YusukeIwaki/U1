@@ -2,13 +2,14 @@ package io.github.yusukeiwaki.u1.daily;
 
 import android.app.Dialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.annimon.stream.Stream;
 import com.varunest.sparkbutton.SparkButton;
 import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.widgets.TimeInputLayout;
-import java.util.List;
+import java.util.ArrayList;
 import org.threeten.bp.LocalDateTime;
 
 public class LifeEventEditor {
@@ -47,15 +48,6 @@ public class LifeEventEditor {
     }
 
     public void execute() {
-      SparkButton chkNyou = (SparkButton) dialog.findViewById(R.id.chk_nyou);
-      chkNyou.setTag("尿");
-      SparkButton chkBen = (SparkButton) dialog.findViewById(R.id.chk_ben);
-      chkBen.setTag("便");
-      SparkButton chkChusha = (SparkButton) dialog.findViewById(R.id.chk_chusha);
-      chkChusha.setTag("注射");
-      SparkButton chkJunyu = (SparkButton) dialog.findViewById(R.id.chk_junyu);
-      chkJunyu.setTag("授乳");
-
       CompoundButton chkTimeEnd = (CompoundButton) dialog.findViewById(R.id.chk_time_end);
       onCheckTimeEndChanged(chkTimeEnd, chkTimeEnd.isChecked());
       chkTimeEnd.setOnCheckedChangeListener(this::onCheckTimeEndChanged);
@@ -86,16 +78,17 @@ public class LifeEventEditor {
       TimeInputLayout editorTimeEnd = (TimeInputLayout) dialog.findViewById(R.id.editor_time_end);
       CompoundButton chkTimeEnd = (CompoundButton) dialog.findViewById(R.id.chk_time_end);
 
-      SparkButton chkNyou = (SparkButton) dialog.findViewById(R.id.chk_nyou);
-      SparkButton chkBen = (SparkButton) dialog.findViewById(R.id.chk_ben);
-      SparkButton chkChusha = (SparkButton) dialog.findViewById(R.id.chk_chusha);
-      SparkButton chkJunyu = (SparkButton) dialog.findViewById(R.id.chk_junyu);
-
-      List<String> selectedChk = Stream.of(chkNyou, chkBen, chkChusha, chkJunyu)
-          .filter(chk -> chk.isChecked())
-          .map(chk -> (String) chk.getTag())
-          .toList();
-
+      ArrayList<String> listSelected = new ArrayList<>();
+      ViewGroup container = (LinearLayout) dialog.findViewById(R.id.event_type_container);
+      for (int i = 0; i < container.getChildCount(); i++) {
+        View v = container.getChildAt(i);
+        if (v instanceof SparkButton) {
+          SparkButton btn = (SparkButton) v;
+          if (btn.isChecked()) {
+            listSelected.add((String) btn.getTag());
+          }
+        }
+      }
       TextView editorMemo = (TextView) dialog.findViewById(R.id.editor_memo);
 
 
@@ -103,7 +96,7 @@ public class LifeEventEditor {
       return new LifeEvent(
           getEpochSecondsFor(editorTimeStart.getTime()),
           chkTimeEnd.isChecked() ? getEpochSecondsFor(editorTimeEnd.getTime()) : 0,
-          selectedChk,
+          listSelected,
           editorMemo.getText().toString());
     }
   }
@@ -132,18 +125,19 @@ public class LifeEventEditor {
     TextView editorMemo = (TextView) dialog.findViewById(R.id.editor_memo);
     editorMemo.setText(lifeEvent.getMemo());
 
-    SparkButton chkNyou = (SparkButton) dialog.findViewById(R.id.chk_nyou);
-    SparkButton chkBen = (SparkButton) dialog.findViewById(R.id.chk_ben);
-    SparkButton chkChusha = (SparkButton) dialog.findViewById(R.id.chk_chusha);
-    SparkButton chkJunyu = (SparkButton) dialog.findViewById(R.id.chk_junyu);
-
     for (String tag : lifeEvent.getEvents()) {
-      Stream.of(chkNyou, chkBen, chkChusha, chkJunyu)
-          .filter(sparkButton -> tag.equals(sparkButton.getTag()))
-          .findFirst()
-          .ifPresent(sparkButton -> {
-            sparkButton.setChecked(true);
-          });
+
+      ViewGroup container = (LinearLayout) dialog.findViewById(R.id.event_type_container);
+      for (int i = 0; i < container.getChildCount(); i++) {
+        View v = container.getChildAt(i);
+        if (v instanceof SparkButton) {
+          SparkButton btn = (SparkButton) v;
+          String tag2 = (String) btn.getTag();
+          if (tag.equals(tag2)) {
+            btn.setChecked(true);
+          }
+        }
+      }
     }
   }
 

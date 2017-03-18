@@ -65,6 +65,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/event_type_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -72,9 +73,9 @@
         android:clipChildren="false"
         >
       <com.varunest.sparkbutton.SparkButton
-          android:id="@+id/chk_nyou"
           android:layout_width="48dp"
           android:layout_height="48dp"
+          android:tag="尿"
           app:sparkbutton_activeImage="@drawable/btn_nyou_on"
           app:sparkbutton_inActiveImage="@drawable/btn_nyou_off"
           app:sparkbutton_iconSize="24dp"
@@ -82,9 +83,9 @@
           app:sparkbutton_secondaryColor="?attr/colorControlNormal"
           />
       <com.varunest.sparkbutton.SparkButton
-          android:id="@+id/chk_ben"
           android:layout_width="48dp"
           android:layout_height="48dp"
+          android:tag="便"
           app:sparkbutton_activeImage="@drawable/btn_ben_on"
           app:sparkbutton_inActiveImage="@drawable/btn_ben_off"
           app:sparkbutton_iconSize="24dp"
@@ -92,9 +93,9 @@
           app:sparkbutton_secondaryColor="?attr/colorControlNormal"
           />
       <com.varunest.sparkbutton.SparkButton
-          android:id="@+id/chk_chusha"
           android:layout_width="48dp"
           android:layout_height="48dp"
+          android:tag="注射"
           app:sparkbutton_activeImage="@drawable/btn_chusha_on"
           app:sparkbutton_inActiveImage="@drawable/btn_chusha_off"
           app:sparkbutton_iconSize="24dp"
@@ -102,11 +103,21 @@
           app:sparkbutton_secondaryColor="?attr/colorControlNormal"
           />
       <com.varunest.sparkbutton.SparkButton
-          android:id="@+id/chk_junyu"
           android:layout_width="48dp"
           android:layout_height="48dp"
+          android:tag="授乳"
           app:sparkbutton_activeImage="@drawable/btn_junyu_on"
           app:sparkbutton_inActiveImage="@drawable/btn_junyu_off"
+          app:sparkbutton_iconSize="24dp"
+          app:sparkbutton_primaryColor="@color/colorAccent"
+          app:sparkbutton_secondaryColor="?attr/colorControlNormal"
+          />
+      <com.varunest.sparkbutton.SparkButton
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:tag="離乳食"
+          app:sparkbutton_activeImage="@drawable/btn_meal_on"
+          app:sparkbutton_inActiveImage="@drawable/btn_meal_off"
           app:sparkbutton_iconSize="24dp"
           app:sparkbutton_primaryColor="@color/colorAccent"
           app:sparkbutton_secondaryColor="?attr/colorControlNormal"

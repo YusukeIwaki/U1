@@ -18,6 +18,8 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 public class DarkClockActivity extends AppCompatActivity {
 
+  private NightScreenBrightnessManager nightScreenBrightnessManager;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -99,6 +101,8 @@ public class DarkClockActivity extends AppCompatActivity {
     int hour = LocalDateTime.now().getHour();
     boolean isNight = hour <= 6 || hour >= 17;
     setActivityDark(isNight);
+
+    nightScreenBrightnessManager = new NightScreenBrightnessManager(this, this::setActivityDark);
   }
 
   private void setActivityDark(boolean dark) {
@@ -125,5 +129,15 @@ public class DarkClockActivity extends AppCompatActivity {
       }
     });
     fragment.setAlpha(0);
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    nightScreenBrightnessManager.enable();
+  }
+
+  @Override protected void onPause() {
+    nightScreenBrightnessManager.disable();
+    super.onPause();
   }
 }
