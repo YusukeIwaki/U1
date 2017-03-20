@@ -1,4 +1,4 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.monthly;
 
 import com.annimon.stream.Stream;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.monthly;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,18 +8,18 @@ import io.github.yusukeiwaki.u1.AbstractFragment;
 import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.daily.DailyViewActivity;
 
-import static io.github.yusukeiwaki.u1.calendar.CurrentMonthCache.updateYearAndMonth;
+import static io.github.yusukeiwaki.u1.monthly.CurrentMonthCache.updateYearAndMonth;
 
-public class CalendarFragment extends AbstractFragment {
+public class MonthlyViewFragment extends AbstractFragment {
   private static final String KEY_YEAR = "year";
   private static final String KEY_MONTH = "month";
 
-  public static CalendarFragment newInstance(int year, int month) {
+  public static MonthlyViewFragment newInstance(int year, int month) {
     Bundle args = new Bundle();
     args.putInt(KEY_YEAR, year);
     args.putInt(KEY_MONTH, month);
 
-    CalendarFragment f = new CalendarFragment();
+    MonthlyViewFragment f = new MonthlyViewFragment();
     f.setArguments(args);
     return f;
   }

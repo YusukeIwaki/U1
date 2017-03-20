@@ -1,4 +1,4 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.monthly;
 
 import com.google.auto.value.AutoValue;
 

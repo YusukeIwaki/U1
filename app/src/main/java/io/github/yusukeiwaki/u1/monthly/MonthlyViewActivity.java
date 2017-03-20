@@ -1,4 +1,4 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.monthly;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.auth.FirebaseSignInDialogFragment;
 import org.threeten.bp.LocalDate;
 
-public class CalendarViewActivity extends AppCompatActivity {
+public class MonthlyViewActivity extends AppCompatActivity {
 
   private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
     FirebaseUser currentUser = firebaseAuth.getCurrentUser();
@@ -35,8 +35,8 @@ public class CalendarViewActivity extends AppCompatActivity {
     FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
   }
 
-  private final CalendarIndicatorHelper
-      indicatorHelper = new CalendarIndicatorHelper();
+  private final MonthlyViewIndicatorHelper
+      indicatorHelper = new MonthlyViewIndicatorHelper();
 
   private void setupViewPager() {
     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -47,7 +47,7 @@ public class CalendarViewActivity extends AppCompatActivity {
 
       @Override public Fragment getItem(int position) {
         LocalDate date = indicatorHelper.getLocalDateForPosition(position);
-        return CalendarFragment.newInstance(date.getYear(), date.getMonthValue());
+        return MonthlyViewFragment.newInstance(date.getYear(), date.getMonthValue());
       }
     });
 
@@ -58,7 +58,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         final int year = date.getYear();
         final int month = date.getMonthValue();
 
-        CurrentMonthCache.updateYearAndMonth(CalendarViewActivity.this, year, month);
+        CurrentMonthCache.updateYearAndMonth(MonthlyViewActivity.this, year, month);
         getSupportActionBar().setTitle(String.format("%d年 %d月", year, month));
       }
     });
