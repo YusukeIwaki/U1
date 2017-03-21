@@ -40,7 +40,7 @@ public class MonthlyViewFragment extends AbstractFragment {
   }
 
   @Override protected void onSetupView() {
-    CalendarLayout layout = (CalendarLayout) rootView;
+    CalendarLayout layout = (CalendarLayout) rootView.findViewById(R.id.calendar);
     layout.setOnItemClickListener(day -> {
       if (day.type() == CalendarDay.TYPE_IN_MONTH) {
         showDayAt(year, month, day.day());
