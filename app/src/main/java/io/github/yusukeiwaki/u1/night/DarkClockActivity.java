@@ -10,11 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 public class DarkClockActivity extends AppCompatActivity {
+
+  private final BackPressHandler backPressHandler = new BackPressHandler();
 
   private NightScreenBrightnessManager nightScreenBrightnessManager;
 
@@ -117,5 +120,13 @@ public class DarkClockActivity extends AppCompatActivity {
   @Override protected void onPause() {
     nightScreenBrightnessManager.disable();
     super.onPause();
+  }
+
+  @Override public void onBackPressed() {
+    if (backPressHandler.handleBackPressed()) {
+      Toast.makeText(this, "アプリを終了するにはもう一回戻るキーを押して", Toast.LENGTH_SHORT).show();
+    } else {
+      super.onBackPressed();
+    }
   }
 }
