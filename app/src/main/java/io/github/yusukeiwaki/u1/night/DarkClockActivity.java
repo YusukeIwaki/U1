@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -46,8 +44,6 @@ public class DarkClockActivity extends AppCompatActivity {
 
     updateCurrentTime();
     initializeScreenDarkness();
-
-    setupBottomSheet();
   }
 
   @Override protected void onDestroy() {
@@ -111,24 +107,6 @@ public class DarkClockActivity extends AppCompatActivity {
     lp.screenBrightness = brightness;
     lp.buttonBrightness = brightness;
     getWindow().setAttributes(lp);
-  }
-
-  private void setupBottomSheet() {
-    BottomSheetBehavior bottomSheet = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-    View captionShowTimer = findViewById(R.id.caption_show_timer);
-    View fragment = findViewById(R.id.fragment_junyu_timer);
-
-    bottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-      @Override public void onStateChanged(@NonNull View bottomSheet, int newState) {
-        captionShowTimer.setVisibility(newState == BottomSheetBehavior.STATE_COLLAPSED ?
-            View.VISIBLE : View.GONE);
-      }
-
-      @Override public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        fragment.setAlpha(slideOffset);
-      }
-    });
-    fragment.setAlpha(0);
   }
 
   @Override protected void onResume() {
