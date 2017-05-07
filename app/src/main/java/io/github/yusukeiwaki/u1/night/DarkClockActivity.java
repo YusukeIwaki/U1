@@ -6,17 +6,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 public class DarkClockActivity extends AppCompatActivity {
+
+  private final BackPressHandler backPressHandler = new BackPressHandler();
 
   private NightScreenBrightnessManager nightScreenBrightnessManager;
 
@@ -46,8 +47,6 @@ public class DarkClockActivity extends AppCompatActivity {
 
     updateCurrentTime();
     initializeScreenDarkness();
-
-    setupBottomSheet();
   }
 
   @Override protected void onDestroy() {
@@ -113,24 +112,6 @@ public class DarkClockActivity extends AppCompatActivity {
     getWindow().setAttributes(lp);
   }
 
-  private void setupBottomSheet() {
-    BottomSheetBehavior bottomSheet = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-    View captionShowTimer = findViewById(R.id.caption_show_timer);
-    View fragment = findViewById(R.id.fragment_junyu_timer);
-
-    bottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-      @Override public void onStateChanged(@NonNull View bottomSheet, int newState) {
-        captionShowTimer.setVisibility(newState == BottomSheetBehavior.STATE_COLLAPSED ?
-            View.VISIBLE : View.GONE);
-      }
-
-      @Override public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        fragment.setAlpha(slideOffset);
-      }
-    });
-    fragment.setAlpha(0);
-  }
-
   @Override protected void onResume() {
     super.onResume();
     nightScreenBrightnessManager.enable();
@@ -139,5 +120,13 @@ public class DarkClockActivity extends AppCompatActivity {
   @Override protected void onPause() {
     nightScreenBrightnessManager.disable();
     super.onPause();
+  }
+
+  @Override public void onBackPressed() {
+    if (backPressHandler.handleBackPressed()) {
+      Toast.makeText(this, "アプリを終了するにはもう一回戻るキーを押して", Toast.LENGTH_SHORT).show();
+    } else {
+      super.onBackPressed();
+    }
   }
 }

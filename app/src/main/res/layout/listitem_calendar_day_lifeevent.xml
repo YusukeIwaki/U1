@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="1dp"
+    android:layout_margin="1dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/calendar_day_background"
+    >
+  <TextView
+      android:id="@+id/time_start_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="12:34"
+      android:textSize="8dp"
+      />
+  <TextView
+      android:id="@+id/detail_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="尿・便"
+      android:layout_marginStart="8dp"
+      android:textSize="8dp"
+      />
+</LinearLayout>

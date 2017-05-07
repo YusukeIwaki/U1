@@ -1,10 +1,10 @@
-package io.github.yusukeiwaki.u1.calendar;
+package io.github.yusukeiwaki.u1.monthly;
 
 import io.github.yusukeiwaki.u1.CalendarConfig;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
-public class CalendarIndicatorHelper {
+public class MonthlyViewIndicatorHelper {
   private final LocalDate base = CalendarConfig.START_DATE;
 
   public int getCount() {
