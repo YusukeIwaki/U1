@@ -2,11 +2,13 @@ package io.github.yusukeiwaki.u1.monthly;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import io.github.yusukeiwaki.u1.AbstractFragment;
 import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.daily.DailyViewActivity;
 import io.github.yusukeiwaki.u1.daily.LifeEvent;
 import java.util.HashMap;
+import org.threeten.bp.LocalDate;
 
 import static io.github.yusukeiwaki.u1.monthly.CurrentMonthCache.updateYearAndMonth;
 
@@ -68,6 +70,12 @@ public class MonthlyViewFragment extends AbstractFragment {
         case CalendarDay.TYPE_OUT_OF_MONTH:
           layout.addDay(day);
       }
+    }
+
+    LocalDate now = LocalDate.now();
+    if (year == now.getYear() && month == now.getMonthValue()) {
+      View parent = (View) calendarViewMap.get(now.getDayOfMonth()).getParent();
+      parent.setBackgroundResource(R.drawable.calendar_today_background);
     }
 
     firebaseArrayManager.setCallback(new FirebaseMonthlyLifeEventManager.Callback() {
