@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import io.github.yusukeiwaki.u1.R;
-import java.util.HashMap;
 
 public class CalendarLayout extends GridLayout {
   public interface OnItemClickListener {
@@ -17,7 +16,6 @@ public class CalendarLayout extends GridLayout {
   }
 
   private OnItemClickListener itemClickListener;
-  private final HashMap<Integer, CalendarDayView> calendarDayViews = new HashMap<>();
 
   public CalendarLayout(Context context) {
     super(context);
@@ -66,9 +64,6 @@ public class CalendarLayout extends GridLayout {
     switch (calendarDay.type()) {
       case CalendarDay.TYPE_IN_MONTH:
         item.setAlpha(1.0f);
-        if (calendarDayView != null) {
-          calendarDayViews.put(calendarDay.day(), calendarDayView);
-        }
         break;
       case CalendarDay.TYPE_OUT_OF_MONTH:
         item.setAlpha(0.125f);

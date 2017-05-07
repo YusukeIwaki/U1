@@ -3,53 +3,75 @@ package io.github.yusukeiwaki.u1.monthly;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.Query;
-import io.github.yusukeiwaki.u1.daily.FirebaseLifeEventManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import io.github.yusukeiwaki.u1.daily.LifeEvent;
-import org.threeten.bp.LocalDateTime;
+import java.util.ArrayList;
 
 public class CalendarDayView extends RecyclerView {
 
-  private static class LifeEventsAdapter extends FirebaseRecyclerAdapter<LifeEvent, CalendarDayLifeEventViewHolder> {
+  private static class LifeEventsAdapter extends RecyclerView.Adapter<CalendarDayLifeEventViewHolder> {
+    private final ArrayList<LifeEvent> lifeEventList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
-    public LifeEventsAdapter(int year, int month, int day) {
-      super(LifeEvent.class,
-          CalendarDayLifeEventViewHolder.getLayout(),
-          CalendarDayLifeEventViewHolder.class,
-          getDatabaseReferenceFor(year, month, day));
-    }
-
-    private static Query getDatabaseReferenceFor(int year, int month, int day) {
-      long start = LocalDateTime.of(year, month, day, 0, 0).toEpochSecond(LifeEvent.getTimeZone());
-      long end = start + 86399;
-
-      return FirebaseLifeEventManager.getDatabaseReference()
-          .orderByChild("timeStart")
-          .startAt(start).endAt(end);
-    }
-
     @Override
-    protected void populateViewHolder(CalendarDayLifeEventViewHolder holder, LifeEvent lifeEvent, int position) {
+    public CalendarDayLifeEventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      View itemView = LayoutInflater.from(parent.getContext()).inflate(CalendarDayLifeEventViewHolder.getLayout(), parent, false);
+      return new CalendarDayLifeEventViewHolder(itemView);
+    }
+
+    @Override public void onBindViewHolder(CalendarDayLifeEventViewHolder holder, int position) {
+      LifeEvent lifeEvent = lifeEventList.get(position);
       holder.bind(lifeEvent);
       holder.itemView.setOnClickListener(view -> {
         if (onItemClickListener != null) onItemClickListener.onItemClick(lifeEvent);
       });
     }
 
+    @Override public int getItemCount() {
+      return lifeEventList.size();
+    }
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
       this.onItemClickListener = onItemClickListener;
+    }
+
+    public void onLifeEventAdded(int index, LifeEvent lifeEvent) {
+      lifeEventList.add(index, lifeEvent);
+      notifyItemInserted(index);
+    }
+
+    public void onLifeEventChanged(int index, LifeEvent lifeEvent) {
+      lifeEventList.set(index, lifeEvent);
+      notifyItemChanged(index);
+    }
+
+    public void onLifeEventRemoved(int index) {
+      lifeEventList.remove(index);
+      notifyItemRemoved(index);
     }
   }
 
   private final LifeEventsAdapter lifeEventsAdapter;
 
-  public CalendarDayView(Context context, int year, int month, int day) {
+  public CalendarDayView(Context context) {
     super(context);
-    lifeEventsAdapter = new LifeEventsAdapter(year, month, day);
+    lifeEventsAdapter = new LifeEventsAdapter();
     setAdapter(lifeEventsAdapter);
     setLayoutManager(new LinearLayoutManager(getContext()));
+  }
+
+  public void onLifeEventAdded(int index, LifeEvent lifeEvent) {
+    lifeEventsAdapter.onLifeEventAdded(index, lifeEvent);
+  }
+
+  public void onLifeEventChanged(int index, LifeEvent lifeEvent) {
+    lifeEventsAdapter.onLifeEventChanged(index, lifeEvent);
+  }
+
+  public void onLifeEventRemoved(int index) {
+    lifeEventsAdapter.onLifeEventRemoved(index);
   }
 
   public interface OnItemClickListener {
@@ -58,9 +80,5 @@ public class CalendarDayView extends RecyclerView {
 
   public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
     lifeEventsAdapter.setOnItemClickListener(onItemClickListener);
-  }
-
-  public void cleanup() {
-    lifeEventsAdapter.cleanup();
   }
 }

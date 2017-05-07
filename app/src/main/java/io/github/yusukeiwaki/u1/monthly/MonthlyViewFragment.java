@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import io.github.yusukeiwaki.u1.AbstractFragment;
 import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.daily.DailyViewActivity;
+import io.github.yusukeiwaki.u1.daily.LifeEvent;
 import java.util.HashMap;
 
 import static io.github.yusukeiwaki.u1.monthly.CurrentMonthCache.updateYearAndMonth;
@@ -12,6 +13,7 @@ import static io.github.yusukeiwaki.u1.monthly.CurrentMonthCache.updateYearAndMo
 public class MonthlyViewFragment extends AbstractFragment {
   private static final String KEY_YEAR = "year";
   private static final String KEY_MONTH = "month";
+  private FirebaseMonthlyLifeEventManager firebaseArrayManager;
 
   public static MonthlyViewFragment newInstance(int year, int month) {
     Bundle args = new Bundle();
@@ -33,6 +35,7 @@ public class MonthlyViewFragment extends AbstractFragment {
     Bundle args = getArguments();
     year = args.getInt(KEY_YEAR);
     month = args.getInt(KEY_MONTH);
+    firebaseArrayManager = new FirebaseMonthlyLifeEventManager(year, month);
   }
 
   @Override protected int getLayout() {
@@ -58,7 +61,7 @@ public class MonthlyViewFragment extends AbstractFragment {
     for (CalendarDay day : helper.getDayList()) {
       switch (day.type()) {
         case CalendarDay.TYPE_IN_MONTH:
-          CalendarDayView calendarDayView = new CalendarDayView(getContext(), year, month, day.day());
+          CalendarDayView calendarDayView = new CalendarDayView(getContext());
           layout.addDayWithView(day, calendarDayView);
           calendarViewMap.put(day.day(), calendarDayView);
           break;
@@ -66,10 +69,24 @@ public class MonthlyViewFragment extends AbstractFragment {
           layout.addDay(day);
       }
     }
+
+    firebaseArrayManager.setCallback(new FirebaseMonthlyLifeEventManager.Callback() {
+      @Override public void onLifeEventAdded(int dayOfMonth, int index, LifeEvent lifeEvent) {
+        calendarViewMap.get(dayOfMonth).onLifeEventAdded(index, lifeEvent);
+      }
+
+      @Override public void onLifeEventChanged(int dayOfMonth, int index, LifeEvent lifeEvent) {
+        calendarViewMap.get(dayOfMonth).onLifeEventChanged(index, lifeEvent);
+      }
+
+      @Override public void onLifeEventRemoved(int dayOfMonth, int index) {
+        calendarViewMap.get(dayOfMonth).onLifeEventRemoved(index);
+      }
+    });
   }
 
   @Override public void onDestroyView() {
-    for (CalendarDayView calendarDayView : calendarViewMap.values()) calendarDayView.cleanup();
+    firebaseArrayManager.cleanup();
     super.onDestroyView();
   }
 
