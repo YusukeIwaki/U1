@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import io.github.yusukeiwaki.u1.R;
 import io.github.yusukeiwaki.u1.auth.FirebaseSignInDialogFragment;
+import io.github.yusukeiwaki.u1.daily.AddLifeEventDialogFragment;
 import org.threeten.bp.LocalDate;
 
 public class MonthlyViewActivity extends AppCompatActivity {
@@ -33,6 +34,16 @@ public class MonthlyViewActivity extends AppCompatActivity {
 
     setupViewPager();
     FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
+    findViewById(R.id.fab_add).setOnClickListener(view -> {
+      FragmentManager fm = getSupportFragmentManager();
+      String tag = AddLifeEventDialogFragment.class.getSimpleName();
+
+      if (fm.findFragmentByTag(tag) == null) {
+        LocalDate now = LocalDate.now();
+        AddLifeEventDialogFragment.newInstance(now.getYear(), now.getMonthValue(), now.getDayOfMonth()).show(fm, tag);
+      }
+    });
   }
 
   private final MonthlyViewIndicatorHelper

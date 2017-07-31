@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import io.github.yusukeiwaki.u1.CalendarConfig;
 import io.github.yusukeiwaki.u1.R;
 import org.threeten.bp.LocalDate;
 
@@ -28,7 +27,7 @@ public class DailyViewActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_calendar_view);
+    setContentView(R.layout.activity_daily_view);
 
     Intent intent = getIntent();
     LocalDate dateNow = LocalDate.now();
