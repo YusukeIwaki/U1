@@ -70,38 +70,50 @@ public class TimeInputLayout extends LinearLayout {
 
       if (editor != editTexts[3]) {
         editor.addTextChangedListener(new SimpleTextWatcher(){
-          @Override public void afterTextChanged(Editable s) {
-            if (s.length() > 0 && !skipTextWatcher) {
-              editor.focusSearch(View.FOCUS_RIGHT).requestFocus();
-            }
+          @Override public void afterTextChanged(final Editable s) {
+            postDelayed(new Runnable() {
+              @Override public void run() {
+                if (s.length() > 0 && !skipTextWatcher) {
+                  editor.focusSearch(View.FOCUS_RIGHT).requestFocus();
+                }
+              }
+            }, 160);
           }
         });
       }
 
       if (editor != editTexts[0]) {
         editor.addTextChangedListener(new SimpleTextWatcher(){
-          @Override public void afterTextChanged(Editable s) {
-            if (s.length() == 0 && !skipTextWatcher) {
-              editor.focusSearch(View.FOCUS_LEFT).requestFocus();
-            }
+          @Override public void afterTextChanged(final Editable s) {
+            postDelayed(new Runnable() {
+              @Override public void run() {
+                if (s.length() == 0 && !skipTextWatcher) {
+                  editor.focusSearch(View.FOCUS_LEFT).requestFocus();
+                }
+              }
+            }, 160);
           }
         });
       }
     }
 
     editTexts[3].addTextChangedListener(new SimpleTextWatcher() {
-      @Override public void afterTextChanged(Editable s) {
-        if (s.length() > 0 && !skipTextWatcher) {
-          if (isValidTime()) {
-            View view = editTexts[editTexts.length - 1].focusSearch(View.FOCUS_DOWN);
-            if (view != null) {
-              view.requestFocus();
-            };
-          } else {
-            shake();
-            editTexts[0].requestFocus();
+      @Override public void afterTextChanged(final Editable s) {
+        postDelayed(new Runnable() {
+          @Override public void run() {
+            if (s.length() > 0 && !skipTextWatcher) {
+              if (isValidTime()) {
+                View view = editTexts[editTexts.length - 1].focusSearch(View.FOCUS_DOWN);
+                if (view != null) {
+                  view.requestFocus();
+                };
+              } else {
+                shake();
+                editTexts[0].requestFocus();
+              }
+            }
           }
-        }
+        }, 160);
       }
     });
 
